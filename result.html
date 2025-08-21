@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Card Is...</title>
+    <style>
+        body {
+            text-align: center;
+            background: #0d0e13;
+            color: #fff;
+            overflow: hidden;
+        }
+        .card-img {
+            width: 150px;
+            margin-top: 20px;
+            animation: pop 1s ease;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .star {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: yellow;
+            border-radius: 50%;
+            animation: fly 3s linear infinite;
+        }
+        @keyframes fly {
+            0% { transform: translateY(100vh) translateX(0); opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(50vw); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🌟 I have read your mind! 🌟</h1>
+    <p>Your card is:</p>
+    <img class="card-img" src="https://deckofcardsapi.com/static/img/{{ card_image(card) }}.png" alt="{{card}}">
+    <br><br>
+    <a href="/"><button>Play Again</button></a>
+
+    <!-- Flying Stars -->
+    <script>
+        for (let i = 0; i < 30; i++) {
+            let star = document.createElement("div");
+            star.classList.add("star");
+            star.style.left = Math.random() * window.innerWidth + "px";
+            star.style.top = Math.random() * window.innerHeight + "px";
+            star.style.animationDuration = (2 + Math.random() * 3) + "s";
+            document.body.appendChild(star);
+        }
+    </script>
+</body>
+</html>
