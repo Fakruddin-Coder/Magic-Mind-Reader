@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mind Reading Card Game</title>
+    <style>
+        body { font-family: Arial; text-align: center; background: #1d1f27; color: white; }
+        .column { display: inline-block; margin: 20px; }
+        .card-img { width: 80px; margin: 5px; }
+        button { padding: 10px 20px; font-size: 16px; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🤯 Mind Controller: Card Edition 🃏</h1>
+    <p>Focus on your card and select the column it’s in.</p>
+
+    <form method="POST" action="/choose">
+        {% for i in range(3) %}
+        <div class="column">
+            {% for card in columns[i] %}
+                <img class="card-img" src="https://deckofcardsapi.com/static/img/{{ card_image(card) }}.png" alt="{{card}}">
+            {% endfor %}
+            <br>
+            <button name="column" value="{{ i + 1 }}">Group {{ i + 1 }}</button>
+        </div>
+        {% endfor %}
+    </form>
+</body>
+</html>
