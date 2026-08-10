@@ -59,6 +59,18 @@ A mind-reading card game web application built with **Python (Flask)**, **HTML5*
 
 ---
 
+## 🌐 Deploy to Vercel
+
+This repository includes pre-configured `vercel.json` and `requirements.txt` for instant Vercel deployment.
+
+1. Push your code to GitHub.
+2. Go to [Vercel Dashboard](https://vercel.com/new).
+3. Import the `Magic-Mind-Reader` repository.
+4. Click **Deploy**. Vercel will automatically build and host your Flask app!
+
+---
+
 ## 📜 License
 
 Distributed under the MIT License. See `LICENSE` for details.
+
