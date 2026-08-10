@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Card Is...</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle at top left, rgba(255, 223, 92, 0.16), transparent 22%),
+                        radial-gradient(circle at top right, rgba(103, 196, 255, 0.12), transparent 18%),
+                        linear-gradient(180deg, #090c18 0%, #111827 45%, #0d1220 100%);
+            color: #f7f9ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 40px 16px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .card-shell {
+            position: relative;
+            width: min(640px, 92vw);
+            padding: 32px 44px 28px;
+            border-radius: 20px;
+            background: rgba(14, 21, 38, 0.92);
+            box-shadow: 0 32px 90px rgba(0, 0, 0, 0.32);
+            border: 1px solid rgba(255,255,255,0.08);
+            animation: floatCard 3.5s ease-in-out infinite;
+            transition: transform 0.24s ease-out, box-shadow 0.28s ease, border-color 0.28s ease;
+            will-change: transform;
+        }
+        .card-shell:hover {
+            box-shadow: 0 36px 100px rgba(64, 123, 255, 0.24);
+            border-color: rgba(96, 161, 255, 0.28);
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+        p {
+            margin: 10px auto 20px;
+            color: #bcc5df;
+            font-size: 0.98rem;
+            max-width: 480px;
+            line-height: 1.6;
+        }
+        .card-img {
+            width: 175px;
+            border-radius: 18px;
+            box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+            animation: pop 0.9s ease-out;
+            transition: transform 0.24s ease, filter 0.24s ease;
+        }
+        .card-img:hover {
+            transform: translateY(-4px) scale(1.02);
+            filter: drop-shadow(0 0 28px rgba(84, 150, 255, 0.65));
+        }
+        .card-footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .play-again {
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: none;
+            background: #f7f9ff;
+            color: #101827;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+        .play-again:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 34px rgba(111, 188, 255, 0.24);
+            filter: drop-shadow(0 0 18px rgba(80, 140, 255, 0.45));
+        }
+        .balloon {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(255, 217, 84, 0.88);
+            box-shadow: 0 0 24px rgba(255, 217, 84, 0.35);
+            opacity: 0;
+            animation: drift 2.8s ease-in forwards;
+        }
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes pop {
+            0% { transform: scale(0.4); opacity: 0; }
+            70% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes drift {
+            0% { opacity: 0; transform: translateY(0) scale(0.9); }
+            20% { opacity: 0.9; }
+            100% { opacity: 0; transform: translateY(-180px) translateX(20px) scale(0.6); }
+        }
+    </style>
+</head>
+<body>
+    <div class="card-shell">
+        <h1>✨ I have read your mind! ✨</h1>
+        <p>Your chosen card has been found. See it appear below and play again if you want another trick.</p>
+        <img class="card-img" src="https://deckofcardsapi.com/static/img/{{ card_image(card) }}.png" alt="{{ card }}">
+        <div class="card-footer">
+            <a href="/"><button class="play-again">Play Again</button></a>
+        </div>
+    </div>
+
+    <script>
+        const colors = ['#f6e27f', '#ffd773', '#a0f2ff'];
+        for (let i = 0; i < 18; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'balloon';
+            dot.style.left = `${10 + Math.random() * 80}%`;
+            dot.style.top = `${60 + Math.random() * 25}%`;
+            dot.style.background = colors[i % colors.length];
+            dot.style.animationDelay = `${Math.random() * 1.4}s`;
+            dot.style.width = `${10 + Math.random() * 12}px`;
+            dot.style.height = dot.style.width;
+            dot.style.opacity = 0;
+            document.body.appendChild(dot);
+        }
+
+        const cardShell = document.querySelector('.card-shell');
+        if (cardShell) {
+            const updatePos = (clientY) => {
+                const deltaY = (clientY / window.innerHeight - 0.5) * 16;
+                cardShell.style.transform = `translateY(${deltaY}px)`;
+            };
+            window.addEventListener('mousemove', (e) => updatePos(e.clientY));
+            window.addEventListener('touchmove', (e) => {
+                if (e.touches && e.touches.length > 0) {
+                    updatePos(e.touches[0].clientY);
+                }
+            });
+            window.addEventListener('wheel', (e) => {
+                const deltaY = e.deltaY > 0 ? 8 : -8;
+                cardShell.style.transform = `translateY(${deltaY}px)`;
+                setTimeout(() => {
+                    cardShell.style.transform = '';
+                }, 300);
+            });
+        }
+    </script>
+</body>
+</html>

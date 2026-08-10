@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mind Reading Card Game</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle at top, rgba(78, 135, 255, 0.16), transparent 30%),
+                        linear-gradient(180deg, #11141d 0%, #161b2f 100%);
+            color: #eef2ff;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+        .page-shell {
+            width: min(1120px, 100%);
+            padding: 24px;
+            border-radius: 24px;
+            background: rgba(12, 17, 34, 0.95);
+            box-shadow: 0 24px 90px rgba(0, 0, 0, 0.30);
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 3vw, 3rem);
+        }
+        p {
+            color: #acb6da;
+            margin: 16px auto 32px;
+            max-width: 760px;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            justify-items: center;
+            margin-bottom: 28px;
+        }
+        .column {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 18px;
+            min-width: 200px;
+        }
+        .column h2 {
+            margin: 0 0 14px;
+            font-size: 1.1rem;
+            color: #a8c3ff;
+        }
+        .card-img {
+            width: 72px;
+            margin: 6px;
+            border-radius: 14px;
+            transition: transform 0.24s ease, filter 0.24s ease, box-shadow 0.24s ease;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+        }
+        .card-img:hover {
+            transform: translateY(-4px);
+            filter: drop-shadow(0 0 22px rgba(76, 144, 255, 0.65));
+        }
+        .top-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+        .home-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 18px;
+            border-radius: 999px;
+            color: #eef2ff;
+            text-decoration: none;
+            background: rgba(79, 120, 255, 0.16);
+            border: 1px solid rgba(124, 181, 255, 0.28);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+        .home-button:hover {
+            transform: translateY(-2px);
+            background: rgba(79, 120, 255, 0.24);
+            box-shadow: 0 14px 30px rgba(79, 120, 255, 0.18);
+        }
+        .column {
+            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+        }
+        .column:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 26px 54px rgba(47, 98, 255, 0.22);
+            border-color: rgba(94, 151, 255, 0.28);
+        }
+        .column button {
+            margin-top: 14px;
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 999px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #101828;
+            background: linear-gradient(135deg, #7db8ff 0%, #4e7bff 100%);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        }
+        .column button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 32px rgba(78, 123, 255, 0.28);
+            filter: drop-shadow(0 0 18px rgba(80, 140, 255, 0.45));
+        }
+        @media (max-width: 850px) {
+            .columns {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <h1>🤯 Mind Controller: Card Edition 🃏</h1>
+        <p>Focus on your card and select the column it’s in. Every choice brings the trick closer to revealing your selected card.</p>
+        <div class="top-actions">
+            <a class="home-button" href="/">Back to Home</a>
+        </div>
+
+        <form method="POST" action="/choose">
+            <div class="columns">
+                {% for i in range(3) %}
+                <div class="column">
+                    <h2>Group {{ i + 1 }}</h2>
+                    {% for card in columns[i] %}
+                        <img class="card-img" src="https://deckofcardsapi.com/static/img/{{ card_image(card) }}.png" alt="{{ card }}" title="{{ card }}">
+                    {% endfor %}
+                    <button name="column" value="{{ i + 1 }}">Choose this group</button>
+                </div>
+                {% endfor %}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
